@@ -16,21 +16,26 @@ var browserMsg = {
     "Accept-Encoding":"gzip, deflate",
     "Accept-Language":"zh-CN,zh;q=0.8",
     "Connection":"keep-alive",
+    "Content-Length":"62",
     "Content-Type":"application/x-www-form-urlencoded; charset=UTF-8",
     "Host":"su.mljjlt.cn",
     "Origin":"http://su.mljjlt.cn",
+    "Referer":"http://su.mljjlt.cn/user/login.php",
     "User-Agent":"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
     "X-Requested-With":"XMLHttpRequest",
 };
 var loginMsg = {
-    "passwd":"密码",
+    "passwd":"",
     "remember_me":"week",
-    "email":"邮箱"
+    "email":""
 };
 function getLoginCookie() {
     //  agent中会有cookie的信息，在回调中再使用agent访问其他页面则不会有限制，
+    agent.get(url.login_url).set(browserMsg).end(function(err, response){
+        console.log('-->',response.headers);
+    });
     agent.post(url.login_url).set(browserMsg).send(loginMsg).end(function (err, response) {
-        
+        console.log(response.text);
         agent.get("http://su.mljjlt.cn/user/node.php").end(function(err,res){
             $ = cheerio.load(res.text);
             var ips = $(".box-body").find('.nav-tabs-custom');
